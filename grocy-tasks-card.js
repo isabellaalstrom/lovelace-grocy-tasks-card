@@ -109,7 +109,7 @@ customElements.whenDefined('card-tools').then(() => {
                       : ""}
                     </div>
                     <div>
-                      <mwc-button @click=${ev => this._track(task.id)}>${this.translate("Track")}</mwc-button>
+                      <mwc-button @click=${ev => this._track(task.id)}>${this.translate("Complete")}</mwc-button>
                     </div>
                   </div>`
                 )}` : cardTools.LitHtml`<div class="info flex">${this.translate("No tasks")}!</div>`}
@@ -179,8 +179,8 @@ customElements.whenDefined('card-tools').then(() => {
         this.show_quantity = this.config.show_quantity == null ? null : this.config.show_quantity;
         this.show_days = this.config.show_days == null ? null : this.config.show_days;
   
-        // this.filter = this.config.filter == null ? null : this.config.filter;
         this.filter_user = this.config.filter_user == null ? null : this.config.filter_user;
+        this.filter_category = this.config.filter_category == null ? null : this.config.filter_category;
   
         this.show_assigned = this.config.show_assigned == null ? true : this.config.show_assigned;
         this.show_category = this.config.show_category == null ? true : this.config.show_category;
@@ -206,17 +206,7 @@ customElements.whenDefined('card-tools').then(() => {
               }
                 return;
             })
-    
-            // if (this.filter != null) {
-            //   var filteredTasks = [];
-            //   for (let i = 0; i < tasks.length; i++) {
-            //     if (tasks[i].name.includes(this.filter)) {
-            //       filteredTasks.push(tasks[i]);
-            //     }
-            //   }
-            //   tasks = filteredTasks;
-            // }
-    
+  
             if (this.filter_user != null) {
               var filteredTasks = [];
               for (let i = 0; i < tasks.length; i++) {
@@ -226,7 +216,15 @@ customElements.whenDefined('card-tools').then(() => {
               }
               tasks = filteredTasks;
             }
-    
+            if (this.filter_category != null) {
+              var filteredTasks = [];
+              for (let i = 0; i < tasks.length; i++) {
+                if (tasks[i].category_id != null && tasks[i].category_id == this.filter_category) {
+                  filteredTasks.push(tasks[i]);
+                }
+              }
+              tasks = filteredTasks;
+            }
             tasks.map(task =>{
               var dueInDays = task.due_date ? this.calculateDueDate(task.due_date) : 10000;
               task.dueInDays = dueInDays;
